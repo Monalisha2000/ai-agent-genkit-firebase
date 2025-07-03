@@ -1,0 +1,30 @@
+{
+  "name": "ai-agent-genkit-firebase",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy",
+    "logs": "firebase functions:log",
+    "genkit:ui": "genkit start -- npx tsx --watch src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@genkit-ai/core": "^1.14.0",
+    "@genkit-ai/googleai": "^1.14.0",
+    "dotenv": "^17.0.1",
+    "genkit": "^1.14.0",
+    "zod": "^3.25.71"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
