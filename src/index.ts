@@ -1,66 +1,51 @@
-import { googleAI } from '@genkit-ai/googleai';
-import { genkit, z } from 'genkit';
-import 'dotenv/config';
+// import * as functions from 'firebase-functions';
+import { genkit } from 'genkit'; // Assuming genkit() is the instance creator
+import { gemini20Flash, googleAI } from '@genkit-ai/googleai';
+import { config } from 'dotenv';
+import { GenkitInstance } from './utils/helperFunctions';
+import { currencyInfoFlow } from './flows/currencyInfoFlow';
 
-// Initialize Genkit with the Google AI plugin
-const ai = genkit({
-    plugins: [googleAI()],
-    model: googleAI.model('gemini-2.5-flash', {
-        temperature: 0.8
-    }),
-});
+// Load environment variables - MUST BE AT THE VERY TOP
+config();
 
-// Define input schema
-const RecipeInputSchema = z.object({
-    ingredient: z.string().describe('Main ingredient or cuisine type'),
-    dietaryRestrictions: z.string().optional().describe('Any dietary restrictions'),
-});
+// TEMPORARY DEBUGGING LINE:
+console.log('API Key from .env (GEMINI_API_KEY):', process.env.GOOGLE_GENAI_API_KEY);
+console.log('API Key from .env (GOOGLE_API_KEY):', process.env.GOOGLE_MAPS_API_KEY);
 
-// Define output schema
-const RecipeSchema = z.object({
-    title: z.string(),
-    description: z.string(),
-    prepTime: z.string(),
-    cookTime: z.string(),
-    servings: z.number(),
-    ingredients: z.array(z.string()),
-    instructions: z.array(z.string()),
-    tips: z.array(z.string()).optional(),
-});
 
-// Define a recipe generator flow
-export const recipeGeneratorFlow = ai.defineFlow(
-    {
-        name: 'recipeGeneratorFlow',
-        inputSchema: RecipeInputSchema,
-        outputSchema: RecipeSchema,
-    },
-    async (input) => {
-        // Create a prompt based on the input
-        const prompt = `Create a recipe with the following requirements:
-      Main ingredient: ${input.ingredient}
-      Dietary restrictions: ${input.dietaryRestrictions || 'none'}`;
+const ai = GenkitInstance.init();
+console.log("ai--------->>>>>>>>>>>>>", ai);
 
-        // Generate structured recipe data using the same schema
-        const { output } = await ai.generate({
-            prompt,
-            output: { schema: RecipeSchema },
-        });
 
-        if (!output) throw new Error('Failed to generate recipe');
+export const currencyFlow = currencyInfoFlow;
 
-        return output;
-    }
-);
 
-// Run the flow
-async function main() {
-    const recipe = await recipeGeneratorFlow({
-        ingredient: 'avocado',
-        dietaryRestrictions: 'vegetarian'
-    });
 
-    console.log(recipe);
-}
 
-main().catch(console.error);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // Initialize Genkit instance with Google AI plugin
+// const ai = genkit({
+
+//     plugins: [googleAI({ apiKey: process.env.GEMINI_API_KEY })],
+//     model: gemini20Flash
+// });
+
+// console.log("ai-------", ai);
