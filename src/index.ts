@@ -4,6 +4,7 @@ import { gemini20Flash, googleAI } from '@genkit-ai/googleai';
 import { config } from 'dotenv';
 import { GenkitInstance } from './utils/helperFunctions';
 import { currencyInfoFlow } from './flows/currencyInfoFlow';
+import { neareststopssuggesion } from './flows/nearestStopFlow';
 
 // Load environment variables - MUST BE AT THE VERY TOP
 config();
@@ -18,8 +19,8 @@ console.log("ai--------->>>>>>>>>>>>>", ai);
 
 
 export const currencyFlow = currencyInfoFlow;
-
-
+export const neareststopssuggesionFlow = neareststopssuggesion
+console.log("flows----", currencyFlow.name); // Should log names of both flows
 
 
 
